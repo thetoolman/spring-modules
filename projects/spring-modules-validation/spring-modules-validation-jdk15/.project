@@ -1,0 +1,15 @@
+<projectDescription>
+  <name>spring-modules-validation-jdk15</name>
+  <comment/>
+  <projects>
+    <project>spring-modules-validation-base</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
