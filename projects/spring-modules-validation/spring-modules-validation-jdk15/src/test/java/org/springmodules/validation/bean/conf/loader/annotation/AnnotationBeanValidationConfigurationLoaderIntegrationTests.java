@@ -158,13 +158,13 @@ public class AnnotationBeanValidationConfigurationLoaderIntegrationTests extends
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appCtxt.xml", getClass());
         Validator validator = (Validator)context.getBean("validator");
 
-        TestBean1 bean = new TestBean1();
+        TeztBean1 bean = new TeztBean1();
         BindException errors = new BindException(bean, "bean");
         validator.validate(bean, errors);
         assertTrue(errors.hasErrors());
         assertTrue(errors.hasFieldErrors("name"));
 
-        bean = new TestBean1("test");
+        bean = new TeztBean1("test");
         errors = new BindException(bean, "bean");
         validator.validate(bean, errors);
         assertFalse(errors.hasErrors());
@@ -176,7 +176,7 @@ public class AnnotationBeanValidationConfigurationLoaderIntegrationTests extends
         BeanValidator validator = new BeanValidator();
         validator.setConfigurationLoader(new AnnotationBeanValidationConfigurationLoader());
 
-        TestBean1 bean = new TestBean1();
+        TeztBean1 bean = new TeztBean1();
         BindException errors = new BindException(bean, "bean");
 
         try {
@@ -191,13 +191,13 @@ public class AnnotationBeanValidationConfigurationLoaderIntegrationTests extends
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appCtxt.xml", getClass());
         Validator validator = (Validator)context.getBean("validator");
 
-        TestBean2 bean = new TestBean2();
+        TeztBean2 bean = new TeztBean2();
         BindException errors = new BindException(bean, "bean");
         validator.validate(bean, errors);
         assertTrue(errors.hasErrors());
         assertTrue(errors.hasFieldErrors("name"));
 
-        bean = new TestBean2("test");
+        bean = new TeztBean2("test");
         errors = new BindException(bean, "bean");
         validator.validate(bean, errors);
         assertFalse(errors.hasErrors());
@@ -209,7 +209,7 @@ public class AnnotationBeanValidationConfigurationLoaderIntegrationTests extends
         BeanValidator validator = new BeanValidator();
         validator.setConfigurationLoader(new AnnotationBeanValidationConfigurationLoader());
 
-        TestBean2 bean = new TestBean2();
+        TeztBean2 bean = new TeztBean2();
         BindException errors = new BindException(bean, "bean");
 
         try {

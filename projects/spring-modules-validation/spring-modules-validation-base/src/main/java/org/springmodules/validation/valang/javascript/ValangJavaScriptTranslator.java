@@ -129,6 +129,16 @@ public class ValangJavaScriptTranslator extends AbstractValangJavaScriptTranslat
         }
     }
 
+    public void writeJavaScriptPredicate(Writer writer, Predicate pred) throws IOException {
+        try {
+            setWriter(writer);
+            appendValidationFunction(pred);
+
+        } finally {
+            clearWriter();
+        }
+    }
+
     protected void appendArrayValidators(Collection rules, MessageSourceAccessor messageSource) throws IOException {
         append("new Array(");
         for (Iterator i = rules.iterator(); i.hasNext();) {

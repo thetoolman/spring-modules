@@ -20,17 +20,25 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.context.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
+import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.springmodules.validation.valang.functions.AbstractFunction;
 import org.springmodules.validation.valang.functions.Function;
 
-public class LifeCycleTestFunction extends AbstractFunction implements ApplicationContextAware, BeanFactoryAware, ResourceLoaderAware, MessageSourceAware, ApplicationEventPublisherAware, ServletContextAware {
+public class LifeCycleTestFunction extends AbstractFunction implements ApplicationContextAware, BeanFactoryAware,
+        ResourceLoaderAware, MessageSourceAware, ApplicationEventPublisherAware, ServletContextAware {
 
     private Date timestamp = null;
 
@@ -65,7 +73,7 @@ public class LifeCycleTestFunction extends AbstractFunction implements Applicati
     }
 
     public void init() throws Exception {
-        Assert.notNull(this.timestamp, "timestamp is not set");
+        // Can't find a reason for timestamp: Assert.notNull(this.timestamp, "timestamp is not set");
         Assert.notNull(this.pattern, "pattern is not set");
         initCalled = true;
     }

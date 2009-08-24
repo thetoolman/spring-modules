@@ -49,7 +49,7 @@ public class AbstractValangJavaScriptTranslator {
      * Returns a <code>Reader</code> for accessing the JavaScript codebase used by the translated validation rules.
      */
     public static Reader getCodebaseReader() {
-        Class<AbstractValangJavaScriptTranslator> clazz = AbstractValangJavaScriptTranslator.class;
+        Class clazz = AbstractValangJavaScriptTranslator.class;
         InputStream resourceAsStream = clazz.getResourceAsStream(VALANG_CODEBASE_JS);
         return new InputStreamReader(resourceAsStream);
     }

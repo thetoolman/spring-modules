@@ -21,13 +21,18 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>logId</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>globalErrorsId</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>Holds the id of the element that should hold/display the global errors</description>
         </attribute>
         <attribute>
-            <name>fieldErrorsIdSuffix</name>
+            <name>fieldErrorIdSuffix</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <description>
@@ -53,7 +58,7 @@
     </tag>
     <tag>
         <name>beanValidate</name>
-        <tag-class>org.springmodules.validation.bean.javascript.taglib.BeanAnnotationValidateTag</tag-class>
+        <tag-class>org.springmodules.validation.bean.annotation.javascript.taglib.BeanAnnotationValidateTag</tag-class>
         <body-content>JSP</body-content>
         <description>Generates a set of JavaScript validation rules bassed on
             the bean annotations on the specified command class.</description>

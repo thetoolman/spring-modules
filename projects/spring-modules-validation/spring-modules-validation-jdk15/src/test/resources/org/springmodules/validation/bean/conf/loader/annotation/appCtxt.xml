@@ -11,8 +11,8 @@
         </property>
     </bean>
 
-    <bean id="testBeanValidator" class="org.springmodules.validation.bean.conf.loader.annotation.TestBeanValidator"/>
+    <bean id="testBeanValidator" class="org.springmodules.validation.bean.conf.loader.annotation.TeztBeanValidator"/>
 
-    <bean id="testBeanCondition" class="org.springmodules.validation.bean.conf.loader.annotation.TestBeanCondition"/>
+    <bean id="testBeanCondition" class="org.springmodules.validation.bean.conf.loader.annotation.TeztBeanCondition"/>
 
 </beans>
