@@ -18,7 +18,6 @@
  */
 
 
-
 if (!Array.prototype.push) {
     // Based on code from http://prototype.conio.net/
     Array.prototype.push = function() {
@@ -313,7 +312,7 @@ ValangValidator.Logger = {
     log: function(msg) {
 		if(! this._logAvailable()) return;
 		var msgLi = document.createElement("li");
-    	msgLi.textContent = msg;
+    	msgLi.appendChild(document.createTextNode(msg));
     	this._logElement.appendChild(msgLi);
     },
     push: function(msg) {
@@ -324,9 +323,9 @@ ValangValidator.Logger = {
 		this._logElement = logElem;
     },
     pop: function(msg) {
-		if(! this._logAvailable()) return;
+    	if(! this._logAvailable()) return;
     	var parent = this._logElement.parentNode;
-    	if (parent.nodeName.toLowerCase() == "ul"){ //check for over-pop!
+    	if (parent && parent.nodeName == "UL"){ //check for over-pop!
     		this._logElement = parent;
     	}
         this.log(msg);
