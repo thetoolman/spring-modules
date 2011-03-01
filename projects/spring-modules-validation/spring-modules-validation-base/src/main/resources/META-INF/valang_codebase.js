@@ -119,7 +119,7 @@ ValangValidator.prototype = {
     validateField: function(field) {
         ValangValidator.Logger.push('Evaluating ' + field.name + ' rules');
 
-        this._clearErrorIfExists(field.name);
+        this._clearErrorIfExists(field);
         var isValid = true;
         var fieldRules = this.groupedRules[field.name];
         var errorRules = new Array();
@@ -142,8 +142,8 @@ ValangValidator.prototype = {
 	            }
 	            ValangValidator.Logger.log(thisValid ? 'Passed' : 'Failed');
 	        }
-	
-	        var errorBox = document.getElementById(field.name + this.fieldErrorIdSuffix);
+	        var errorBox = this._getErrorBox(field);
+	        	
 	        if( errorRules.length > 0) {
 	        	//inject first error only
 	        	if( errorBox != null) {
@@ -255,10 +255,17 @@ ValangValidator.prototype = {
     },
     
     _clearErrorIfExists: function(field) {
-        var errorBox = document.getElementById(field + this.fieldErrorIdSuffix);
+        var errorBox = this._getErrorBox(field);
+        
         if (errorBox != null) {
         	this._insertText(errorBox, this.emptyErrorHTML);
         }
+    },
+    
+    _getErrorBox: function(field) {
+    	//try stripping [ and ]
+        return document.getElementById(field.name + this.fieldErrorIdSuffix) ||
+    	document.getElementById(field.name.replace(/\[|\]/g,"") + this.fieldErrorIdSuffix); 
     },
     
     _clearGlobalErrors: function() {
@@ -398,6 +405,9 @@ ValangValidator.Field = function(fieldElement) {
             case 'radio':
                 this.getValue = ValangValidator.Field.ValueGetters['inputSelector'];
                 break;
+            case 'file':
+            	this.getValue = function(){return "";}; //can't get file info
+            	break;
             default:
                 throw 'unexpected input field type \'' + this.type + '\'';
         }
@@ -523,23 +533,32 @@ ValangValidator.Rule.prototype = {
 	/* 	This function tries to convert the lhs into a type that is compatible with the rhs for the various
 		JS compare operations.  Supports Date, Number, String 
 	 */    
-	_makeCompatible: function(lhs, rhs) {
+    _makeCompatible: function(lhs, rhs) {
         if(this._isSameType(lhs, rhs)) return lhs;
         // else must be different types
-/*
-		ValangValidator.Logger.log("LHS: " + lhs + " : " + this._realTypeOf(lhs));
-		ValangValidator.Logger.log("RHS: " + rhs + " : " + this._realTypeOf(rhs));
-*/
+    /*
+        ValangValidator.Logger.log("LHS: " + lhs + " : " + this._realTypeOf(lhs));
+        ValangValidator.Logger.log("RHS: " + rhs + " : " + this._realTypeOf(rhs));
+    */
         if(typeof lhs == 'date' || typeof lhs == 'date') {
-        	throw "Can\'t make date compatible with non-date: " + lhs + " : " + rhs;
+            throw "Can\'t make date compatible with non-date: " + lhs + " : " + rhs;
         }
         
+        //if RHS is a boolean, attempt force of LHS
+        if (rhs === true || rhs === false) {
+            try {
+                return this._forceBoolean(lhs);
+            } catch(ex) {
+                // lhs not boolean
+            }
+        }
+
         //if RHS is number-able, attempt force of LHS
-    	try {
+        try {
             this._forceNumber(rhs);
             return this._forceNumber(lhs);
         } catch(ex) {
-        	// lhs not number
+            // lhs not number
         }
         
         // else string
@@ -548,6 +567,11 @@ ValangValidator.Rule.prototype = {
         } else {
             throw 'unable to convert [' + lhs + '] and [' + rhs + '] to compatible types';
         }
+    },    
+    _forceBoolean: function(value) {
+    	if (!value || value === "false") return false;
+        if (value === true || value === "true") return true;
+        throw "unable to convert value [" + value + "] (" + (typeof value) + ") to boolean";
     },
     _forceNumber: function(value) {
         if (value && typeof value != 'number' && typeof value != 'date') {
@@ -661,7 +685,8 @@ ValangValidator.Rule.prototype = {
         return lhs && lhs.length > 0;
     },
     isBlank: function(lhs, rhs) {
-        return !lhs || lhs.length === 0;
+    	//trim leading and trialing whitespace; thanks http://blog.stevenlevithan.com/archives/faster-trim-javascript
+        return !lhs || lhs.replace(/^\s\s*/, '').replace(/\s\s*$/, '').length === 0;
     },
     isWord: function(lhs, rhs) {
         return lhs && lhs.replace(/\s/g, '') == lhs;
