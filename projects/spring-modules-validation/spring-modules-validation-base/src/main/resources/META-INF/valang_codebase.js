@@ -78,9 +78,9 @@ ValangValidator.prototype = {
     classRuleFieldName: "valang-global-rules", // to match CommandObjectToValangConverter.CLASS_RULENAME
 
     addRules: function(newRules, addFirst){
-    	//Reset the form field cache as dynamic fields may have been added.
-    	ValangValidator.Logger.log('Resetting Field cache as addRules called');
-    	this.form.fieldArrayCache = null;
+        //Reset the form field cache as dynamic fields may have been added.
+        ValangValidator.Logger.log('Resetting Field cache as addRules called');
+        this.form.fieldArrayCache = null;
         //create grouped rules by field
         for (var i = 0; i < newRules.length; i++) {
             var ruleField = newRules[i].field;
@@ -93,11 +93,18 @@ ValangValidator.prototype = {
 
             fieldArray[addFirst ? "unshift":"push"](newRules[i]);
 
-            var fields = this.form.getFieldsWithName(ruleField);
-            for(field in fields){
-                this.addEventHandler(fields[field]);
-            }
+            this.reapplyRules(ruleField, true); //keep cache as we cleared it just before
+        }
+    },
 
+    /* for when you remove form field from DOM and add new DOM elements
+     * keepCache only if you know that no new DOM fields have been added since caching
+    */
+    reapplyRules: function(fieldName, keepCache){
+        if(!keepCache) this.form.fieldArrayCache = null;
+        var fields = this.form.getFieldsWithName(fieldName);
+        for(field in fields){
+            this.addEventHandler(fields[field]);
         }
     },
 
@@ -344,9 +351,9 @@ ValangValidator.Form.prototype = {
         return matchingFields;
     },
     getFields: function() {
-    	
+
         if (this.fieldArrayCache == null) {
-        	ValangValidator.Logger.log('Field Cache is Null, populating cache now');
+            ValangValidator.Logger.log('Field Cache is Null, populating cache now');
             this.fieldArrayCache = new Array();
             var tagElements = this.formElement.elements;
             for (var i = 0; i < tagElements.length; i++) {
