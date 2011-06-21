@@ -19,6 +19,7 @@
  * @author Toolman
  */
 
+
 /******************************************************************************
 *
 * Core validation object.
@@ -77,6 +78,9 @@ ValangValidator.prototype = {
     classRuleFieldName: "valang-global-rules", // to match CommandObjectToValangConverter.CLASS_RULENAME
 
     addRules: function(newRules, addFirst){
+    	//Reset the form field cache as dynamic fields may have been added.
+    	ValangValidator.Logger.log('Resetting Field cache as addRules called');
+    	this.form.fieldArrayCache = null;
         //create grouped rules by field
         for (var i = 0; i < newRules.length; i++) {
             var ruleField = newRules[i].field;
@@ -310,6 +314,7 @@ ValangValidator.prototype = {
 
 ValangValidator.Form = function(formElement) {
     this.formElement = formElement;
+    this.fieldArrayCache = null;
 };
 
 ValangValidator.Form.prototype = {
@@ -339,16 +344,20 @@ ValangValidator.Form.prototype = {
         return matchingFields;
     },
     getFields: function() {
-        var fields = new Array();
-        var tagElements = this.formElement.elements;
-        for (var i = 0; i < tagElements.length; i++) {
+    	
+        if (this.fieldArrayCache == null) {
+        	ValangValidator.Logger.log('Field Cache is Null, populating cache now');
+            this.fieldArrayCache = new Array();
+            var tagElements = this.formElement.elements;
+            for (var i = 0; i < tagElements.length; i++) {
 
-            if(tagElements[i].nodeName == "FIELDSET") continue;
-            if(tagElements[i].nodeName == "BUTTON") continue;
+                if(tagElements[i].nodeName == "FIELDSET") continue;
+                if(tagElements[i].nodeName == "BUTTON") continue;
 
-            fields.push(new ValangValidator.Field(tagElements[i]));
+                this.fieldArrayCache.push(new ValangValidator.Field(tagElements[i]));
+            }
         }
-        return fields;
+        return this.fieldArrayCache;
     },
     disable: function() {
         var fields = this.getFields();
