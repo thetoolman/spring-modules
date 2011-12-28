@@ -7,18 +7,21 @@
     <artifactId>spring-modules</artifactId>
         <version>0.10-SNAPSHOT</version>
   </parent>
-  <groupId>org.springmodules</groupId>
-  <artifactId>projects</artifactId>
-    <version>0.10-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  
+	<artifactId>projects</artifactId>
+	<!-- Inherited from parent
+	<groupId></groupId>
+	<version></version>
+	-->
+	<packaging>pom</packaging>
 
     <modules>
         <!--
         <module>spring-modules-ant</module>
         <module>spring-modules-aop</module>
         -->
-        <module>spring-modules-cache</module>
         <!--
+        <module>spring-modules-cache</module>
         <module>spring-modules-db4o</module>
         <module>spring-modules-flux</module>
         <module>spring-modules-hivemind</module>
